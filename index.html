@@ -75,6 +75,7 @@
   .print-footer{display:none;margin-top:30px;border-top:1px solid #ccc;padding-top:10px;font-size:10px;color:#888;}
   .pro-lock-notice{background:#fff8e6;border:1px solid var(--gold);border-radius:8px;padding:12px 16px;font-size:13px;color:#7a5c00;margin-top:10px;}
 </style>
+<script src="email-gate.js"></script>
 </head>
 <body>
 <header>
@@ -293,12 +294,7 @@ function switchTab(id){
   });
 }
 
-function openPro(tab){
-  currentProTab=tab;
-  document.getElementById('proModal').style.display='flex';
-  document.getElementById('code-input').value='';
-  document.getElementById('code-msg').textContent='';
-}
+function openPro(tab){ JRH.checkEmail(function(){ window.print(); }); }
 function closePro(e){
   if(e.target===document.getElementById('proModal'))
     document.getElementById('proModal').style.display='none';
