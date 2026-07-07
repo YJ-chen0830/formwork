@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
@@ -59,7 +59,10 @@
 
   /* ── Print ── */
   @media print{
-    header,.tabs,.no-print,details.proc{display:none!important;}
+    header,.tabs,.no-print{display:none!important;}
+    details.proc{display:block!important;margin-top:16px;border:1px solid #bbb;border-radius:6px;break-inside:avoid;}
+    details.proc>summary{display:none!important;}
+    details.proc>pre{font-size:10px;line-height:1.75;white-space:pre-wrap;padding:12px 16px;color:#1a1a1a;font-family:"Courier New",monospace;}
     body{background:#fff;margin:0;font-size:12px;}
     main{padding:0;max-width:100%;}
     .panel{display:block!important;}
@@ -176,7 +179,7 @@
     <h2>樓板模板結果</h2>
     <div id="sl-result"><p style="color:#888">尚未計算</p></div>
     <button class="pro-btn no-print" onclick="openPro('sl')" id="sl-pro-btn">📄 產出正式計算書 PDF</button>
-    <details class="proc no-print" id="sl-proc" style="display:none;">
+    <details class="proc" id="sl-proc" style="display:none;">
       <summary>📋 計算過程（供第三方檢核）</summary>
       <pre id="sl-proc-text"></pre>
     </details>
@@ -223,7 +226,7 @@
     <h2>牆面模板結果</h2>
     <div id="wl-result"><p style="color:#888">尚未計算</p></div>
     <button class="pro-btn no-print" onclick="openPro('wl')" id="wl-pro-btn">📄 產出正式計算書 PDF</button>
-    <details class="proc no-print" id="wl-proc" style="display:none;">
+    <details class="proc" id="wl-proc" style="display:none;">
       <summary>📋 計算過程（供第三方檢核）</summary>
       <pre id="wl-proc-text"></pre>
     </details>
