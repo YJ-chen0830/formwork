@@ -57,6 +57,16 @@
   .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   @media(max-width:600px){.proj-grid{grid-template-columns:1fr;}}
 
+  /* ── Mobile Tab System ── */
+  .mob-tabs{display:none;}
+  @media screen and (max-width:767px){
+    .mob-tabs{display:flex;background:var(--bg);border-bottom:2px solid var(--line);margin:0 -20px 0;padding:0 20px;}
+    .mob-tab{flex:1;padding:11px 4px;text-align:center;font-size:13.5px;font-weight:700;color:#888;cursor:pointer;background:transparent;border:none;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;}
+    .mob-tab.active{color:var(--navy);border-bottom-color:var(--gold);}
+    .grid{display:block;}
+    .grid>.card{display:none;}
+    .grid>.card.mob-active{display:block;}
+  }
   /* ── Print ── */
   @media print{
     header,.tabs,.no-print{display:none!important;}
@@ -148,8 +158,12 @@
 
 <!-- ===== 樓板 ===== -->
 <div id="panel-sl" class="panel active">
+<div class="mob-tabs">
+  <button class="mob-tab active" onclick="switchMobTab('sl-in',this)">📋 輸入參數</button>
+  <button class="mob-tab" id="mobTab-sl-r" onclick="switchMobTab('sl-r',this)">📊 計算結果</button>
+</div>
 <div class="grid">
-  <div class="card no-print">
+  <div class="card no-print mob-active" data-tab="sl-in">
     <h2>樓板模板輸入</h2>
     <div class="sec">混凝土與載重</div>
     <div class="row2">
@@ -175,7 +189,7 @@
     <button class="calc-btn" onclick="calcSlab()">計算樓板模板</button>
     <div class="note">依 ACI 347 及模板工程設計規範。合板斷面係數 S=bt²/6，b取1m，I=bt³/12。撓度限制：L/360 或 3mm。</div>
   </div>
-  <div class="card">
+  <div class="card" data-tab="sl-r">
     <h2>樓板模板結果</h2>
     <div id="sl-result"><p style="color:#888">尚未計算</p></div>
     <button class="pro-btn no-print" onclick="openPro('sl')" id="sl-pro-btn">📄 產出正式計算書 PDF</button>
@@ -189,8 +203,12 @@
 
 <!-- ===== 牆面 ===== -->
 <div id="panel-wl" class="panel">
+<div class="mob-tabs">
+  <button class="mob-tab active" onclick="switchMobTab('wl-in',this)">📋 輸入參數</button>
+  <button class="mob-tab" id="mobTab-wl-r" onclick="switchMobTab('wl-r',this)">📊 計算結果</button>
+</div>
 <div class="grid">
-  <div class="card no-print">
+  <div class="card no-print mob-active" data-tab="wl-in">
     <h2>牆面模板輸入（ACI 347 混凝土側壓）</h2>
     <div class="sec">混凝土澆置條件</div>
     <div class="row2">
@@ -222,7 +240,7 @@
     <button class="calc-btn" onclick="calcWall()">計算牆面模板</button>
     <div class="note">ACI 347 公式：p = Cw·Cc·[7.2 + 785R/(T+17.8)]，上限 γc·H 且不超過 30 kPa（一般混凝土）。</div>
   </div>
-  <div class="card">
+  <div class="card" data-tab="wl-r">
     <h2>牆面模板結果</h2>
     <div id="wl-result"><p style="color:#888">尚未計算</p></div>
     <button class="pro-btn no-print" onclick="openPro('wl')" id="wl-pro-btn">📄 產出正式計算書 PDF</button>
@@ -286,6 +304,17 @@ function getMonthlyCode(){
   tmp=pos^0xDEAD;
   for(var j=0;j<4;j++){code+=chars[tmp%chars.length];tmp=Math.floor(tmp/chars.length);}
   return code;
+}
+
+// Domain lock
+(function(){var h=location.hostname;var ok=!h||h==='localhost'||h==='127.0.0.1'||h==='yj-chen0830.github.io';if(!ok){document.body.innerHTML='<div style="padding:60px 30px;text-align:center;font-family:sans-serif;"><h2 style="color:#0b1f3a;">⚠ 未授權使用</h2><p>本工具版權屬於 <strong>儒鴻結構技師事務所</strong>，<br>僅授權於 <a href="https://yj-chen0830.github.io">yj-chen0830.github.io</a> 使用。</p></div>';throw new Error('Unauthorized domain');}})();
+
+function switchMobTab(name,btn){
+  btn.parentElement.querySelectorAll('.mob-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  btn.parentElement.nextElementSibling.querySelectorAll('.card').forEach(function(c){
+    c.classList.toggle('mob-active',c.dataset.tab===name);
+  });
 }
 
 var currentProTab='sl';
@@ -422,6 +451,7 @@ function calcSlab(){
   document.getElementById('sl-proc').style.display='';
   document.getElementById('projSection').style.display='';
   // sl-lock removed; pro-btn already visible
+  if(window.innerWidth<768){var b=document.getElementById('mobTab-sl-r');if(b)switchMobTab('sl-r',b);}
 }
 
 // ── 牆面計算 ──
@@ -485,6 +515,7 @@ function calcWall(){
   document.getElementById('wl-proc').style.display='';
   document.getElementById('projSection').style.display='';
   // wl-lock removed; pro-btn already visible
+  if(window.innerWidth<768){var b=document.getElementById('mobTab-wl-r');if(b)switchMobTab('wl-r',b);}
 }
 
 // 管理者查詢（隱藏功能：URL 加 ?admin=1）
